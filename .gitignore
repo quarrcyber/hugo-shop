@@ -1,0 +1,13 @@
+.env
+/plan web.docx
+.idea/
+.vscode/
+.hallmark/*.tmp
+services/*/vendor/
+services/shop/node_modules/
+services/shop/public/build/
+services/shop/storage/*.key
+services/shop/storage/framework/cache/data/*
+services/shop/storage/framework/sessions/*
+services/shop/storage/framework/views/*
+services/shop/storage/logs/*.log

@@ -1,0 +1,12 @@
+FROM composer:2.8 AS vendor
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-interaction --no-progress --prefer-dist
+
+FROM php:8.4-cli-alpine
+RUN apk add --no-cache curl
+WORKDIR /app
+COPY --from=vendor /app/vendor ./vendor
+COPY public ./public
+EXPOSE 8082
+CMD ["php", "-S", "0.0.0.0:8082", "-t", "public"]

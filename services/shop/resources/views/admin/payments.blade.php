@@ -1,0 +1,5 @@
+@extends('layouts.app')
+@section('title', 'Thanh toán · Hugo Shop')
+@section('content')
+<div class="page shell"><header class="page-head"><h1 class="page-title">Thanh toán</h1><p class="page-lede">Theo dõi giao dịch từ Payment Service và thực hiện hoàn tiền có kiểm soát.</p></header>@include('admin._nav')<div class="table-wrap"><table class="data-table"><thead><tr><th>Giao dịch</th><th>Đơn</th><th>Khách</th><th>Số tiền</th><th>Trạng thái</th><th></th></tr></thead><tbody>@foreach($payments as $payment)<tr><td>{{ $payment->transaction_id ?? 'Chưa có' }}</td><td>{{ $payment->order->order_number }}</td><td>{{ $payment->user->name }}</td><td class="money">{{ number_format($payment->amount, 0, ',', '.') }} ₫</td><td><span class="badge">{{ $payment->status }}</span></td><td>@if($payment->status === 'succeeded')<form method="post" action="{{ route('admin.payments.refund', $payment) }}">@csrf<button class="btn btn--danger" type="submit">Hoàn tiền</button></form>@endif</td></tr>@endforeach</tbody></table></div><div class="pagination">{{ $payments->links() }}</div></div>
+@endsection

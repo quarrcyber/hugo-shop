@@ -1,0 +1,16 @@
+{
+    "name": "hugo-shop/payment-service",
+    "description": "Internal mock payment service for Hugo Shop",
+    "type": "project",
+    "require": {
+        "php": "^8.4",
+        "ext-curl": "*",
+        "slim/psr7": "^1.8",
+        "slim/slim": "^4.15"
+    },
+    "autoload": {
+        "psr-4": {
+            "Payment\\": "src/"
+        }
+    }
+}
