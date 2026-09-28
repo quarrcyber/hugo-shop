@@ -51,7 +51,7 @@ docker                    PHP và Nginx images
 docs                      Kiến trúc, ERD, luồng thanh toán, OpenAPI
 ```
 
-Chỉ Nginx publish cổng ra máy host. MySQL, Redis, MinIO, Mailpit, Payment Service và Mock Shipping chỉ giao tiếp qua các network nội bộ. Xem chi tiết trong `docs/architecture.md`.
+Chỉ Nginx publish cổng ra máy host. MySQL, Redis, RustFS, Mailpit, Payment Service và Mock Shipping chỉ giao tiếp qua các network nội bộ. Xem chi tiết trong `docs/architecture.md`.
 
 ## Kiểm tra
 

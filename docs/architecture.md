@@ -21,7 +21,7 @@ flowchart LR
 
     subgraph data[data internal]
         MySQL[(MySQL 8)]
-        MinIO[(MinIO)]
+        ObjectStorage[(RustFS S3)]
     end
 
     Nginx --> Shop
@@ -32,7 +32,7 @@ flowchart LR
     Queue --> Redis
     Shop --> MySQL
     Queue --> MySQL
-    Shop --> MinIO
+    Shop --> ObjectStorage
     Shop --> Mailpit
     Payment -->|HMAC webhook qua gateway| Nginx
 ```
@@ -46,14 +46,14 @@ flowchart LR
 | Nginx | Mailpit | Xem email tại `/mailpit/` |
 | Shop | MySQL | Dữ liệu nghiệp vụ |
 | Shop | Redis | Session, cache, queue |
-| Shop | MinIO | Ảnh sản phẩm |
+| Shop | RustFS | Ảnh sản phẩm qua API tương thích S3 |
 | Shop | Payment Service | Tokenize, charge, refund |
 | Shop | Mock Shipping | Báo giá và vận đơn |
 | Payment Service | Nginx | Webhook có chữ ký HMAC |
 
-Payment Service và Mock Shipping không thuộc network `dmz`, không publish cổng và không thể được gọi trực tiếp từ máy host. MySQL và MinIO chỉ thuộc `data`. Redis chỉ thuộc `app`. Shop nối đồng thời `app` và `data` vì đây là thành phần duy nhất cần truy cập cả nghiệp vụ lẫn lưu trữ.
+Payment Service và Mock Shipping không thuộc network `dmz`, không publish cổng và không thể được gọi trực tiếp từ máy host. MySQL và RustFS chỉ thuộc `data`. Redis chỉ thuộc `app`. Shop nối đồng thời `app` và `data` vì đây là thành phần duy nhất cần truy cập cả nghiệp vụ lẫn lưu trữ.
 
-MinIO vẫn hoàn toàn nội bộ. Khi Staff tải ảnh sản phẩm, Shop lưu object key rồi phục vụ ảnh qua route `/media/products/...`; trình duyệt không nhận URL nội bộ hoặc credential S3. Service `minio-init` tạo bucket `products` một lần trước khi PHP-FPM được đánh dấu healthy.
+RustFS vẫn hoàn toàn nội bộ. Khi Staff tải ảnh sản phẩm, Shop lưu object key rồi phục vụ ảnh qua route `/media/products/...`; trình duyệt không nhận URL nội bộ hoặc credential S3. Service `storage-init` tạo bucket `products` một lần trước khi PHP-FPM được đánh dấu healthy.
 
 ## Biên bảo mật
 
