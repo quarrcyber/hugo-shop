@@ -1,6 +1,6 @@
 # Hugo Shop
 
-Hugo Shop là website thương mại điện tử dùng cho học tập và thực hành pentest trong môi trường local. Bản hiện tại là mốc sạch: Laravel 12 phục vụ storefront, REST API và admin; Slim 4 xử lý thanh toán giả lập; một dịch vụ nhỏ mô phỏng vận chuyển.
+Hugo Shop là website thương mại điện tử trong môi trường local. Bản hiện tại là mốc sạch: Laravel 12 phục vụ storefront, REST API và admin; Slim 4 xử lý thanh toán giả lập; một dịch vụ nhỏ mô phỏng vận chuyển.
 
 ## Chạy nhanh
 
