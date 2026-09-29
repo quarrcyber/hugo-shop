@@ -2,16 +2,15 @@
 
 Hugo Shop là website thương mại điện tử dùng cho học tập và thực hành pentest trong môi trường local. Bản hiện tại là mốc sạch: Laravel 12 phục vụ storefront, REST API và admin; Slim 4 xử lý thanh toán giả lập; một dịch vụ nhỏ mô phỏng vận chuyển.
 
-## Chạy nhanh
+## Chạy nhanh trên Linux
 
-Yêu cầu duy nhất là Docker Desktop có Docker Compose v2.
+Cài Docker Engine cùng Compose plugin và kiểm tra bằng `docker compose version`. Cú pháp hiện hành là `docker compose`; lệnh `docker-compose` có dấu gạch nối thuộc bản standalone cũ.
 
 ```bash
-cp .env.example .env
 docker compose up --build
 ```
 
-Mở `http://127.0.0.1:8080`. Lần khởi động đầu sẽ chạy migration và seed dữ liệu mẫu. Mailpit được proxy tại `http://127.0.0.1:8080/mailpit/`.
+Không cần tạo `.env` để chạy local; Compose đã có giá trị mặc định an toàn cho môi trường học tập. Khi cần tùy chỉnh, sao chép `.env.example` thành `.env` trước khi chạy. Mở `http://127.0.0.1:8080`. Lần khởi động đầu sẽ chạy migration và seed dữ liệu mẫu. Mailpit được proxy tại `http://127.0.0.1:8080/mailpit/`.
 
 Tài khoản mẫu dùng chung mật khẩu `Password123!`:
 
@@ -56,9 +55,9 @@ Chỉ Nginx publish cổng ra máy host. MySQL, Redis, RustFS, Mailpit, Payment 
 ## Kiểm tra
 
 ```bash
-docker compose exec shop-php-fpm php artisan test
+docker compose exec -e APP_ENV=testing -e DB_CONNECTION=sqlite -e DB_DATABASE=:memory: -e CACHE_STORE=array -e SESSION_DRIVER=array -e QUEUE_CONNECTION=sync -e MAIL_MAILER=array shop-php-fpm php artisan test
 docker compose exec shop-php-fpm ./vendor/bin/phpstan analyse
-docker compose exec shop-php-fpm composer audit
+docker run --rm --volume "$PWD/services/shop:/app:ro" --workdir /app composer:2.8 audit --locked --no-interaction
 ```
 
 Kiểm tra frontend và dependency JavaScript từ `services/shop`:

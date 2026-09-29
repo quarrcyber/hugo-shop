@@ -8,5 +8,7 @@ RUN apk add --no-cache curl
 WORKDIR /app
 COPY --from=vendor /app/vendor ./vendor
 COPY public ./public
+RUN chown -R nobody:nobody /app
+USER nobody
 EXPOSE 8082
 CMD ["php", "-S", "0.0.0.0:8082", "-t", "public"]

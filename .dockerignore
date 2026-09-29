@@ -1,0 +1,15 @@
+.git
+.github
+.idea
+.vscode
+.env
+.hallmark
+plan web.docx
+docs
+services/*/vendor
+services/shop/node_modules
+services/shop/public/build
+services/shop/storage/framework/cache/data/*
+services/shop/storage/framework/sessions/*
+services/shop/storage/framework/views/*
+services/shop/storage/logs/*

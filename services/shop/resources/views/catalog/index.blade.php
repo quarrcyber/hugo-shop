@@ -6,7 +6,6 @@
 <div class="page shell">
     <header class="page-head">
         <h1 class="page-title">Catalog</h1>
-        <p class="page-lede">Tìm theo tên, lọc theo danh mục và khoảng giá. Mọi kết quả đều đến từ dữ liệu đã seed trong MySQL.</p>
     </header>
 
     <form class="filters" method="get" action="{{ route('catalog.index') }}">

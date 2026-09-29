@@ -50,9 +50,11 @@ class DatabaseSeeder extends Seeder
             $adjectives = ['Tĩnh', 'Mộc', 'Lam', 'Sớm', 'Nâu', 'Rêu', 'Gọn', 'An', 'Thô', 'Nhẹ'];
             $nouns = ['Sổ tay', 'Đèn bàn', 'Bình nước', 'Khay gỗ', 'Túi vải', 'Cốc sứ', 'Kệ nhỏ', 'Ví gập', 'Cáp sạc', 'Hộp quà'];
 
+            $products = collect();
+
             foreach (range(1, 50) as $index) {
                 $name = $nouns[($index - 1) % count($nouns)].' '.$adjectives[($index - 1) % count($adjectives)].' '.str_pad((string) $index, 2, '0', STR_PAD_LEFT);
-                Product::query()->create([
+                $products->push(Product::query()->create([
                     'category_id' => $categories[($index - 1) % $categories->count()]->id,
                     'sku' => 'HUGO-'.str_pad((string) $index, 4, '0', STR_PAD_LEFT),
                     'slug' => Str::slug($name).'-'.$index,
@@ -65,7 +67,7 @@ class DatabaseSeeder extends Seeder
                     'image_path' => '/images/placeholders/product-'.(($index - 1) % 6 + 1).'.svg',
                     'featured' => $index <= 8,
                     'status' => 'active',
-                ]);
+                ]));
             }
 
             $customer = $users->firstWhere('role', 'customer');
@@ -91,8 +93,8 @@ class DatabaseSeeder extends Seeder
             ]);
 
             foreach (range(1, 6) as $number) {
-                $products = Product::query()->whereBetween('id', [($number - 1) * 2 + 1, ($number - 1) * 2 + 2])->get();
-                $subtotal = (int) $products->sum('price');
+                $orderProducts = $products->slice(($number - 1) * 2, 2);
+                $subtotal = (int) $orderProducts->sum('price');
                 $order = Order::query()->create([
                     'user_id' => $customer->id,
                     'order_number' => 'HS-'.now()->format('ymd').'-'.str_pad((string) $number, 5, '0', STR_PAD_LEFT),
@@ -110,7 +112,7 @@ class DatabaseSeeder extends Seeder
                     'shipping_service' => 'express',
                 ]);
 
-                foreach ($products as $product) {
+                foreach ($orderProducts as $product) {
                     $order->items()->create([
                         'product_id' => $product->id,
                         'sku' => $product->sku,
@@ -122,7 +124,7 @@ class DatabaseSeeder extends Seeder
                 }
 
                 if ($number <= 4) {
-                    $reviewed = $products->first();
+                    $reviewed = $orderProducts->first();
                     Review::query()->create([
                         'user_id' => $customer->id,
                         'product_id' => $reviewed->id,
